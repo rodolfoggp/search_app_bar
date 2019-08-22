@@ -77,6 +77,7 @@ class _SearchAppBarState extends State<SearchAppBar>
 
   void cancelSearch() {
     widget.searcher.setSearchMode(false);
+    widget.searcher.onClearSearchQuery();
     _elevation = 4.0;
     _controller.reverse();
   }
