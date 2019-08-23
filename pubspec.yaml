@@ -1,8 +1,8 @@
 name: search_app_bar
 description: A new Flutter package project.
-version: 0.0.1
-author:
-homepage:
+version: 1.0.0
+author: Rodolfo Gusson <rodolfoggp@gmail.com>
+homepage: https://github.com/rodolfoggp/search_app_bar
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
