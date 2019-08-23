@@ -1,14 +1,35 @@
 # search_app_bar
 
-A new Flutter package project.
+An animated SearchAppBar Widget, to be used with Flutter.
 
-## Getting Started
+## Usage
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+Simply use the SearchAppBar widget, included in this package, 
+where you would use a regular AppBar:
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+    Scaffold(
+      appBar: SearchAppBar(
+        title: Text(title),
+        searcher: bloc,
+      ),
+      body: // Insert body here
+    );
+
+The only required attribute in this widget is **searcher**.
+Here, you should pass an instance of a class that uses **Searcher**
+as a mixin. Like this one:
+
+    class HomeBloc with Searcher {
+        // ...
+    }
+
+A functional example can be found at:
+https://github.com/rodolfoggp/search_test
+
+## Disclaimer
+
+This small library was developed (and later, improved)
+based on the excellent tutorial provided by Nishant Desai at:
+https://blog.usejournal.com/change-app-bar-in-flutter-with-animation-cfffb3413e8a
+
+All due credit goes to him :)
