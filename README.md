@@ -23,8 +23,7 @@ as a mixin. Like this one:
         // ...
     }
 
-A functional example can be found at:
-https://github.com/rodolfoggp/search_test
+A functional example can be found in the **example** folder.
 
 ## Disclaimer
 
