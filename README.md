@@ -2,6 +2,8 @@
 
 An animated SearchAppBar Widget, to be used with Flutter.
 
+![](demo.gif)
+
 ## Usage
 
 Simply use the `SearchAppBar` widget as a regular AppBar.
