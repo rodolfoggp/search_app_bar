@@ -21,13 +21,17 @@ Here's a simple example of **SearchAppBar**'s usage with bloc:
 
 ## Implementing Searcher
 
-When you implement the **Searcher** interface, you must provide an implementation for both overrides:
+When you implement the **Searcher** interface in your class, you must provide an implementation for both overrides:
+    
+    class BlocExample implements Searcher {
+        ...
+    
+        @override
+        List<T> get data => ...
 
-    @override
-    List<T> get data => ...
-
-    @override
-    get onDataFiltered => ...
+        @override
+        get onDataFiltered => ...
+    }
 
 `data` should simply return your full data list, in which you will search for elements.
 
@@ -136,6 +140,11 @@ Below is an example of a HomeBloc class that implements **Searcher**:
       }
     }
 
+## Filters
+
+Note how in our example, we used a data list of type `List<String>`.
+
+If we don't provide anything in **SearchAppBar**'s `filter`
 
 ## Disclaimer
 
