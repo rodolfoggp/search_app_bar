@@ -17,3 +17,11 @@
 # 1.0.2
 
 - Changed SearchAppBar logic and usage.
+
+# 1.0.2+1
+
+- Updated Readme.md
+
+# 1.0.2+2
+
+- Updated Readme.md
