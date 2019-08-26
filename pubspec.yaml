@@ -1,6 +1,6 @@
 name: search_app_bar
 description: An animated SearchAppBar library that makes it easy to control the search for any type of data in a list of elements.
-version: 1.0.2
+version: 1.0.2+1
 author: Rodolfo Gusson <rodolfoggp@gmail.com>
 homepage: https://github.com/rodolfoggp/search_app_bar
 

@@ -37,7 +37,7 @@ class SearchBloc<T> extends BlocBase {
   }) {
     _configureFilter();
     searchQuery.listen((query) {
-      final filtered = searcher.data.where((test) => filter(test, query)).toList();
+      final List<T> filtered = searcher.data.where((test) => filter(test, query)).toList();
       searcher.onDataFiltered(filtered);
     });
   }
