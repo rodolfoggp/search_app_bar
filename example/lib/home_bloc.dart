@@ -7,11 +7,11 @@ class HomeBloc extends BlocBase implements Searcher<String> {
 
   final dataList = [
     'Thaís Fernandes',
-    'Vinicius Santos',
+    'Thainá Santos',
     'Gabrielly Costa',
-    'Olívia Sousa',
-    'Diogo Lima',
-    'Lucas Assunção',
+    'Gabriel Sousa',
+    'Luís Lima',
+    'Diego Assunção',
     'Conceição Cardoso'
   ];
 
