@@ -4,11 +4,43 @@ An animated SearchAppBar Widget, to be used with Flutter.
 
 ## Usage
 
-Simply use the **SearchAppBar** widget as a regular AppBar.
-The only required attribute in the widget is called **searcher**.
+Simply use the `SearchAppBar` widget as a regular AppBar.
+The only required attribute in the widget is called `searcher`.
 
-You must implement the **Searcher** interface in a class of yours, to
-control the list of data and react to the list filtering provided by **SearchAppBar**.
+You must implement the `Searcher<T>` interface in a class of yours (a Bloc, for example), to
+control a list of data (of type `T`) and react to the list filtering provided by `SearchAppBar`.
+
+Here's a simple example of `SearchAppBar`'s usage with bloc:
+
+    Scaffold(
+      appBar: SearchAppBar<String>(
+        searcher: bloc,
+      ),
+      body: ...
+    );
+
+## Implementing Searcher
+
+When you implement the `Searcher` interface in your class, you must provide an implementation for both overrides:
+    
+    class BlocExample implements Searcher<String> {
+        ...
+    
+        @override
+        List<String> get data => ...
+
+        @override
+        get onDataFiltered => ...
+    }
+
+`data` should simply return your full data list (in this case, a list of Strings), in which you will search for elements.
+
+`onDataFiltered` expects a function that receives a `List<T>`. This is the filtered data list, based on what was typed on the `SearchAppBar`. Use that list as you will. 
+For example, if you are using Bloc, add this filtered list to your data's `StreamController`.
+
+## Complete Example
+
+Here's a complete example of a view using `SearchAppBar`:
 
     import 'package:flutter/material.dart';
     import 'package:search_app_bar/filter.dart';
@@ -49,7 +81,6 @@ control the list of data and react to the list filtering provided by **SearchApp
           appBar: SearchAppBar<String>(
             title: Text(title),
             searcher: bloc,
-            filter: Filters.startsWith,
             iconTheme: IconThemeData(color: Colors.white),
           ),
           body: StreamBuilder<List<String>>(
@@ -71,8 +102,8 @@ control the list of data and react to the list filtering provided by **SearchApp
       }
     }
 
-Below is an example of a HomeBloc class that implements **Searcher**:
-(This example also uses the **bloc_pattern** library to implement a bloc class)
+Below is an example of a HomeBloc class that implements `Searcher`:
+(This example also uses the `bloc_pattern` library to implement a bloc class)
 
     import 'package:bloc_pattern/bloc_pattern.dart';
     import 'package:rxdart/subjects.dart';
@@ -110,6 +141,67 @@ Below is an example of a HomeBloc class that implements **Searcher**:
       }
     }
 
+## Filters
+
+Note how, in our example, we used a data list of type `List<String>`. 
+
+In this specific case, we can omit the `filter` parameter if we want. It will be implied that we will search for strings in our data list that start with whatever we type on the `SearchAppBar`.
+
+However, let's say that we need to search for a person's name inside a list of `Person`:
+
+    class Person {
+        final String name;
+        final String occupation;
+        final int age;
+        ...
+    }
+
+In this case, we will need to implement a `Searcher<Person>` and provide a way for `SearchAppBar` to filter `Person` data as we want.
+
+Enter the `filter` parameter:
+
+    SearchAppBar<Person>(
+        searcher: bloc,
+        filter: (Person person, String query) => Filters.startsWith(person.name, query),
+    );
+
+Here we are instructing our `SearchAppBar` to filter only the `Person` objects whose names start with the typed query on the search bar.
+
+The `Filters` class is provided with this library and contain the following pre-made `String` filters: `startsWith`, `equals`and `contains`.
+
+These filters compare strings unregarding upper/lower case and diacritics.
+
+You can also create your own `Filter` if you need.
+
+## Parameters
+
+Here's a list of all `SearchAppBar` parameters and what they do:
+
+`searcher`: You must provide an object that implements `Searcher<T>` here.
+
+`filter`: You can provide a customized filter here if needed.
+
+`title`: The title widget on the app bar.
+
+`centerTitle`: If `true`, this centralizes the `title` widget.
+
+`iconTheme`: Used to define the colors of `IconButtons` on the app bar.
+
+`backgroundColor`: AppBar's Background color.
+
+`searchBackgroundColor`: The color used as the AppBar's background when the search is active.
+
+`searchElementsColor`: Mainly used for icons, such as the back arrow button, when the search is active.
+
+`hintText`: The text shown as a hint when the search is active.
+
+`flattenOnSearch`: If `true`, removes the AppBar's elevation when the search is active.
+
+`capitalization`: The capitalization rule for the search text on the AppBar.
+
+`actions`: You can provide other `IconButton` within this array. They will appear besides the search button.
+
+`searchButtonPosition`: The index that the search button should occupy in the actions array. It defaults to the last position.
 
 ## Disclaimer
 
