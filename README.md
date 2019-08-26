@@ -4,26 +4,91 @@ An animated SearchAppBar Widget, to be used with Flutter.
 
 ## Usage
 
-Simply use the SearchAppBar widget, included in this package, 
-where you would use a regular AppBar:
+Simply use the **SearchAppBar** widget as a regular AppBar.
+The only required attribute in the widget is called **searcher**.
 
-    Scaffold(
-      appBar: SearchAppBar(
-        title: Text(title),
-        searcher: bloc,
-      ),
-      body: // Insert body here
-    );
+You must implement the **Searcher** interface in a class of yours, to
+control the list of data and react to the list filtering provided by **SearchAppBar**.
 
-The only required attribute in this widget is **searcher**.
-Here, you should pass an instance of a class that uses **Searcher**
-as a mixin. Like this one:
+  import 'package:flutter/material.dart';
+  import 'package:search_app_bar/search_app_bar.dart';
+  import 'package:search_test/home_bloc.dart';
 
-    class HomeBloc with Searcher {
-        // ...
+  class MyHomePage extends StatelessWidget {
+    final String title;
+    final HomeBloc bloc;
+
+    MyHomePage({
+        this.title,
+        this.bloc,
+    });
+
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+          appBar: SearchAppBar<String>(
+              title: Text(title),
+              searcher: bloc,
+              filter: Filters.startsWith,
+              iconTheme: IconThemeData(color: Colors.white),
+          ),
+          body: StreamBuilder<List<String>>(
+              stream: bloc.filteredData,
+              builder: (context, snapshot) {
+              final list = snapshot.data;
+              return ListView.builder(
+                  itemBuilder: (context, index) {
+                  return ListTile(
+                      title: Text(list[index]),
+                  );
+                  },
+                  itemCount: list.length,
+              );
+            },
+          ),
+        );
+      }
     }
 
-A functional example can be found in the **example** folder.
+Below is an example of a HomeBloc class that implements **Searcher**:
+(This example also uses the **bloc_pattern** library to implement a bloc class)
+
+  import 'package:bloc_pattern/bloc_pattern.dart';
+  import 'package:rxdart/subjects.dart';
+  import 'package:search_app_bar/searcher.dart';
+
+  class HomeBloc extends BlocBase implements Searcher<String> {
+
+    final _filteredData = BehaviorSubject<List<String>>();
+
+    final dataList = [
+        'Thaís Fernandes',
+        'Vinicius Santos',
+        'Gabrielly Costa',
+        'Olívia Sousa',
+        'Diogo Lima',
+        'Lucas Assunção',
+        'Conceição Cardoso'
+    ];
+
+    Stream<List<String>> get filteredData => _filteredData.stream;
+
+    HomeBloc() {
+        _filteredData.add(dataList);
+    }
+
+    @override
+    get onDataFiltered => _filteredData.add;
+
+    @override
+    get data => dataList;
+    
+    @override
+    void dispose() {
+        _filteredData.close();
+        super.dispose();
+    }
+  }
 
 ## Disclaimer
 

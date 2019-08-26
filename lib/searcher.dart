@@ -1,7 +1,6 @@
-mixin Searcher {
-  Function(bool) get setSearchMode;
-  Stream<bool> get isInSearchMode;
-  Function(String) get onSearchQueryChanged;
-  Stream<String> get searchQuery;
-  Function get onClearSearchQuery => () => onSearchQueryChanged('');
+import 'dart:core';
+
+abstract class Searcher<T> {
+  Function(List<T>) get onDataFiltered;
+  List<T> get data;
 }

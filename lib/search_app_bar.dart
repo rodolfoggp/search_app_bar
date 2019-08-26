@@ -1,13 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:search_app_bar/search_bloc.dart';
+import 'package:search_app_bar/searcher.dart';
 
 import 'app_bar_painter.dart';
+import 'filter.dart';
 import 'search_widget.dart';
-import 'searcher.dart';
 
-class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
+class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
   final Searcher searcher;
+  final Filter<T> filter;
   final Widget title;
   final bool centerTitle;
   final IconThemeData iconTheme;
@@ -22,6 +25,7 @@ class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   SearchAppBar({
     @required this.searcher,
+    this.filter,
     this.title,
     this.centerTitle = false,
     this.iconTheme,
@@ -43,11 +47,12 @@ class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(56.0);
 
-  _SearchAppBarState createState() => _SearchAppBarState();
+  _SearchAppBarState<T> createState() => _SearchAppBarState<T>();
 }
 
-class _SearchAppBarState extends State<SearchAppBar>
-    with SingleTickerProviderStateMixin {
+class _SearchAppBarState<T> extends State<SearchAppBar<T>>
+    with SingleTickerProviderStateMixin<SearchAppBar<T>> {
+  SearchBloc<T> bloc;
   double _rippleStartX, _rippleStartY;
   AnimationController _controller;
   Animation _animation;
@@ -56,6 +61,10 @@ class _SearchAppBarState extends State<SearchAppBar>
   @override
   void initState() {
     super.initState();
+    bloc = SearchBloc<T>(
+      searcher: widget.searcher,
+      filter: widget.filter,
+    );
     _controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 150));
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
@@ -64,7 +73,7 @@ class _SearchAppBarState extends State<SearchAppBar>
 
   animationStatusListener(AnimationStatus animationStatus) {
     if (animationStatus == AnimationStatus.completed) {
-      widget.searcher.setSearchMode(true);
+      bloc.setSearchMode(true);
       if (widget.flattenOnSearch) _elevation = 0.0;
     }
   }
@@ -76,8 +85,8 @@ class _SearchAppBarState extends State<SearchAppBar>
   }
 
   void cancelSearch() {
-    widget.searcher.setSearchMode(false);
-    widget.searcher.onClearSearchQuery();
+    bloc.setSearchMode(false);
+    bloc.onClearSearchQuery();
     _elevation = 4.0;
     _controller.reverse();
   }
@@ -95,7 +104,7 @@ class _SearchAppBarState extends State<SearchAppBar>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return StreamBuilder<bool>(
-        stream: widget.searcher.isInSearchMode,
+        stream: bloc.isInSearchMode,
         builder: (context, snapshot) {
           final isInSearchMode = snapshot.data ?? false;
           return WillPopScope(
@@ -160,7 +169,7 @@ class _SearchAppBarState extends State<SearchAppBar>
   Widget _buildSearchWidget(bool isInSearchMode, BuildContext context) {
     return isInSearchMode
         ? SearchWidget(
-            searcher: widget.searcher,
+            bloc: bloc,
             color: widget.searchElementsColor ?? Theme.of(context).primaryColor,
             onCancelSearch: cancelSearch,
             textCapitalization: widget.capitalization,
