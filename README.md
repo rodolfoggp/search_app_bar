@@ -10,39 +10,60 @@ The only required attribute in the widget is called **searcher**.
 You must implement the **Searcher** interface in a class of yours, to
 control the list of data and react to the list filtering provided by **SearchAppBar**.
 
-  import 'package:flutter/material.dart';
-  import 'package:search_app_bar/search_app_bar.dart';
-  import 'package:search_test/home_bloc.dart';
+    import 'package:flutter/material.dart';
+    import 'package:search_app_bar/filter.dart';
+    import 'package:search_app_bar/search_app_bar.dart';
 
-  class MyHomePage extends StatelessWidget {
-    final String title;
-    final HomeBloc bloc;
+    import 'home_bloc.dart';
 
-    MyHomePage({
+    void main() => runApp(MyApp());
+
+    class MyApp extends StatelessWidget {
+      @override
+      Widget build(BuildContext context) {
+        return MaterialApp(
+          title: 'Search App Bar Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: MyHomePage(
+            title: 'Search App Bar Demo',
+            bloc: HomeBloc(),
+          ),
+        );
+      }
+    }
+
+    class MyHomePage extends StatelessWidget {
+      final String title;
+      final HomeBloc bloc;
+
+      MyHomePage({
         this.title,
         this.bloc,
-    });
+      });
 
-    @override
-    Widget build(BuildContext context) {
+      @override
+      Widget build(BuildContext context) {
         return Scaffold(
           appBar: SearchAppBar<String>(
-              title: Text(title),
-              searcher: bloc,
-              filter: Filters.startsWith,
-              iconTheme: IconThemeData(color: Colors.white),
+            title: Text(title),
+            searcher: bloc,
+            filter: Filters.startsWith,
+            iconTheme: IconThemeData(color: Colors.white),
           ),
           body: StreamBuilder<List<String>>(
-              stream: bloc.filteredData,
-              builder: (context, snapshot) {
+            stream: bloc.filteredData,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return Container();
               final list = snapshot.data;
               return ListView.builder(
-                  itemBuilder: (context, index) {
+                itemBuilder: (context, index) {
                   return ListTile(
-                      title: Text(list[index]),
+                    title: Text(list[index]),
                   );
-                  },
-                  itemCount: list.length,
+                },
+                itemCount: list.length,
               );
             },
           ),
@@ -53,15 +74,14 @@ control the list of data and react to the list filtering provided by **SearchApp
 Below is an example of a HomeBloc class that implements **Searcher**:
 (This example also uses the **bloc_pattern** library to implement a bloc class)
 
-  import 'package:bloc_pattern/bloc_pattern.dart';
-  import 'package:rxdart/subjects.dart';
-  import 'package:search_app_bar/searcher.dart';
+    import 'package:bloc_pattern/bloc_pattern.dart';
+    import 'package:rxdart/subjects.dart';
+    import 'package:search_app_bar/searcher.dart';
 
-  class HomeBloc extends BlocBase implements Searcher<String> {
+    class HomeBloc extends BlocBase implements Searcher<String> {
+      final _filteredData = BehaviorSubject<List<String>>();
 
-    final _filteredData = BehaviorSubject<List<String>>();
-
-    final dataList = [
+      final dataList = [
         'Thaís Fernandes',
         'Vinicius Santos',
         'Gabrielly Costa',
@@ -69,26 +89,27 @@ Below is an example of a HomeBloc class that implements **Searcher**:
         'Diogo Lima',
         'Lucas Assunção',
         'Conceição Cardoso'
-    ];
+      ];
 
-    Stream<List<String>> get filteredData => _filteredData.stream;
+      Stream<List<String>> get filteredData => _filteredData.stream;
 
-    HomeBloc() {
+      HomeBloc() {
         _filteredData.add(dataList);
-    }
+      }
 
-    @override
-    get onDataFiltered => _filteredData.add;
+      @override
+      get onDataFiltered => _filteredData.add;
 
-    @override
-    get data => dataList;
-    
-    @override
-    void dispose() {
+      @override
+      get data => dataList;
+
+      @override
+      void dispose() {
         _filteredData.close();
         super.dispose();
+      }
     }
-  }
+
 
 ## Disclaimer
 
