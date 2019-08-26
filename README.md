@@ -7,8 +7,35 @@ An animated SearchAppBar Widget, to be used with Flutter.
 Simply use the **SearchAppBar** widget as a regular AppBar.
 The only required attribute in the widget is called **searcher**.
 
-You must implement the **Searcher** interface in a class of yours, to
-control the list of data and react to the list filtering provided by **SearchAppBar**.
+You must implement the **Searcher\<T\>** interface in a class of yours (a Bloc, for example), to
+control a list of data (of type **T**) and react to the list filtering provided by **SearchAppBar**.
+
+Here's a simple example of **SearchAppBar**'s usage with bloc:
+
+    Scaffold(
+      appBar: SearchAppBar<String>(
+        searcher: bloc,
+      ),
+      body: ...
+    );
+
+## Implementing Searcher
+
+When you implement the **Searcher** interface, you must provide an implementation for both overrides:
+
+    @override
+    List<T> get data => ...
+
+    @override
+    get onDataFiltered => ...
+
+`data` should simply return your full data list, in which you will search for elements.
+
+`onDataFiltered` expects a function that receives a `List<T>`. This is the filtered data list. Use that list as you will. For example, if you are using Bloc, add this filtered list to your data's `StreamController`.
+
+## Complete Example
+
+Here's a complete example of a view using **SearchAppBar**:
 
     import 'package:flutter/material.dart';
     import 'package:search_app_bar/filter.dart';
@@ -49,7 +76,6 @@ control the list of data and react to the list filtering provided by **SearchApp
           appBar: SearchAppBar<String>(
             title: Text(title),
             searcher: bloc,
-            filter: Filters.startsWith,
             iconTheme: IconThemeData(color: Colors.white),
           ),
           body: StreamBuilder<List<String>>(
