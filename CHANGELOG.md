@@ -13,3 +13,7 @@
 # 1.0.1+2
 
 - Fixed example's Readme.md
+
+# 1.0.2
+
+- Changed SearchAppBar logic and usage.
