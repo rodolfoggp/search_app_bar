@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-
-import 'searcher.dart';
+import 'package:search_app_bar/search_bloc.dart';
 
 class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
+  final SearchBloc bloc;
   final Color color;
   final VoidCallback onCancelSearch;
-  final Searcher searcher;
   final TextCapitalization textCapitalization;
   final String hintText;
 
   SearchWidget({
-    @required this.searcher,
+    @required this.bloc,
     @required this.onCancelSearch,
     this.color,
     this.textCapitalization,
@@ -47,7 +46,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildClearButton() {
     return StreamBuilder<String>(
-      stream: searcher.searchQuery,
+      stream: bloc.searchQuery,
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data?.isEmpty != false)
           return Container();
@@ -56,7 +55,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
             Icons.close,
             color: color,
           ),
-          onPressed: searcher.onClearSearchQuery,
+          onPressed: bloc.onClearSearchQuery,
         );
       },
     );
@@ -76,7 +75,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
           bottom: 13.0,
         ),
         child: StreamBuilder<String>(
-          stream: searcher.searchQuery,
+          stream: bloc.searchQuery,
           builder: (context, snapshot) {
             TextEditingController controller = _getController(snapshot);
             return TextField(
@@ -89,7 +88,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
               ),
               textCapitalization: textCapitalization ?? TextCapitalization.none,
               style: TextStyle(fontSize: 18.0),
-              onChanged: searcher.onSearchQueryChanged,
+              onChanged: bloc.onSearchQueryChanged,
             );
           },
         ),

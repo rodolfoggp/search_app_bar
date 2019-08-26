@@ -14,7 +14,7 @@ packages:
       name: bloc_pattern
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.3"
+    version: "2.3.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -101,7 +101,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.22.1+1"
+    version: "0.22.2"
   search_app_bar:
     dependency: "direct main"
     description:

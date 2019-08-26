@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_app_bar.dart';
 
 import 'home_bloc.dart';
@@ -33,9 +34,10 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SearchAppBar(
+      appBar: SearchAppBar<String>(
         title: Text(title),
         searcher: bloc,
+        filter: Filters.startsWith,
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: StreamBuilder<List<String>>(
