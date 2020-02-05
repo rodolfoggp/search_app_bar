@@ -5,13 +5,12 @@ import 'package:search_app_bar/search_bloc.dart';
 import 'package:search_app_bar/searcher.dart';
 
 import 'app_bar_painter.dart';
-import 'filter.dart';
 import 'search_widget.dart';
 
 class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
   final Searcher searcher;
-  final Filter<T> filter;
   final Widget title;
+  final Widget leading;
   final bool centerTitle;
   final IconThemeData iconTheme;
   final Color backgroundColor;
@@ -25,8 +24,8 @@ class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
 
   SearchAppBar({
     @required this.searcher,
-    this.filter,
     this.title,
+    this.leading,
     this.centerTitle = false,
     this.iconTheme,
     this.backgroundColor,
@@ -45,7 +44,7 @@ class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
   // search button position defaults to the end.
 
   @override
-  Size get preferredSize => Size.fromHeight(56.0);
+  Size get preferredSize => Size.fromHeight(62);
 
   _SearchAppBarState<T> createState() => _SearchAppBarState<T>();
 }
@@ -63,7 +62,6 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
     super.initState();
     bloc = SearchBloc<T>(
       searcher: widget.searcher,
-      filter: widget.filter,
     );
     _controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 150));
@@ -123,12 +121,13 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
   AppBar _buildAppBar(BuildContext context) {
     final searchButton = _buildSearchButton(context);
     final increasedActions = List<Widget>();
+    increasedActions.add(searchButton);
     increasedActions.addAll(widget.actions);
-    increasedActions.insert(widget._searchButtonPosition, searchButton);
     return AppBar(
       backgroundColor: widget.backgroundColor ?? Theme.of(context).primaryColor,
       iconTheme: widget.iconTheme ?? Theme.of(context).iconTheme,
       title: widget.title,
+      leading: widget.leading ?? Container(),
       elevation: _elevation,
       centerTitle: widget.centerTitle,
       actions: increasedActions,
