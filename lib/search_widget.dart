@@ -7,6 +7,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onCancelSearch;
   final TextCapitalization textCapitalization;
   final String hintText;
+  final TextInputType keyboardType;
 
   SearchWidget({
     @required this.bloc,
@@ -14,6 +15,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
     this.color,
     this.textCapitalization,
     this.hintText,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -79,6 +81,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
           builder: (context, snapshot) {
             TextEditingController controller = _getController(snapshot);
             return TextField(
+              keyboardType: this.keyboardType,
               controller: controller,
               autofocus: true,
               decoration: InputDecoration(

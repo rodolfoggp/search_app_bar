@@ -21,6 +21,7 @@ class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
   final TextCapitalization capitalization;
   final List<Widget> actions;
   final int _searchButtonPosition;
+  final TextInputType keyboardType;
 
   SearchAppBar({
     @required this.searcher,
@@ -35,6 +36,7 @@ class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
     this.flattenOnSearch = false,
     this.capitalization = TextCapitalization.none,
     this.actions = const <Widget>[],
+    this.keyboardType,
     int searchButtonPosition,
   }) : _searchButtonPosition = (searchButtonPosition != null &&
                 (0 <= searchButtonPosition &&
@@ -173,6 +175,7 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
             onCancelSearch: cancelSearch,
             textCapitalization: widget.capitalization,
             hintText: widget.hintText,
+            keyboardType: this.widget.keyboardType,
           )
         : Container();
   }
