@@ -22,7 +22,10 @@ dependencies:
   search_app_bar:
     path: ../
   bloc_pattern:
-  rxdart: ^0.24.1
+  rxdart:
+    git:
+      url: https://github.com/ReactiveX/rxdart
+      ref: master
   diacritic: ^0.1.1
 
 
