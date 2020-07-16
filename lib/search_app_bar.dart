@@ -126,8 +126,9 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
     increasedActions.add(searchButton);
     increasedActions.addAll(widget.actions);
     return AppBar(
-      backgroundColor: widget.backgroundColor ?? Theme.of(context).primaryColor,
-      iconTheme: widget.iconTheme ?? Theme.of(context).iconTheme,
+      backgroundColor:
+          widget.backgroundColor ?? Theme.of(context).appBarTheme.color,
+      iconTheme: widget.iconTheme ?? Theme.of(context).appBarTheme.iconTheme,
       title: widget.title,
       leading: widget.leading ?? Container(),
       elevation: _elevation,
@@ -142,7 +143,8 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
         onPressed: null,
         icon: Icon(
           Icons.search,
-          color: widget.iconTheme?.color ?? Theme.of(context).iconTheme.color,
+          color: widget.iconTheme?.color ??
+              Theme.of(context).appBarTheme.iconTheme,
         ),
       ),
       onTapUp: onSearchTapUp,

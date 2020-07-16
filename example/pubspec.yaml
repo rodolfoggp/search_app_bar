@@ -22,7 +22,7 @@ dependencies:
   search_app_bar:
     path: ../
   bloc_pattern:
-  rxdart:
+  rxdart: ^0.24.1
   diacritic: ^0.1.1
 
 
