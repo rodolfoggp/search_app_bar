@@ -144,7 +144,7 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
         icon: Icon(
           Icons.search,
           color: widget.iconTheme?.color ??
-              Theme.of(context).appBarTheme.iconTheme,
+              Theme.of(context).appBarTheme.iconTheme.color,
         ),
       ),
       onTapUp: onSearchTapUp,
