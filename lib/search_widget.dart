@@ -71,22 +71,30 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildTextField() {
-    return StreamBuilder<String>(
-      stream: bloc.searchQuery,
-      builder: (context, snapshot) {
-        TextEditingController controller = _getController(snapshot);
-        return TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: hintText,
-          ),
-          textCapitalization: textCapitalization ?? TextCapitalization.none,
-          style: TextStyle(fontSize: 18.0),
-          onChanged: bloc.onSearchQueryChanged,
-        );
-      },
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: 8,
+        ),
+        child: StreamBuilder<String>(
+          stream: bloc.searchQuery,
+          builder: (context, snapshot) {
+            TextEditingController controller = _getController(snapshot);
+            return TextField(
+              controller: controller,
+              autofocus: true,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 12.0),
+                hintText: hintText,
+              ),
+              textCapitalization: textCapitalization ?? TextCapitalization.none,
+              style: TextStyle(fontSize: 18.0, color: color),
+              onChanged: bloc.onSearchQueryChanged,
+            );
+          },
+        ),
+      ),
     );
   }
 
