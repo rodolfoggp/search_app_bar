@@ -7,6 +7,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onCancelSearch;
   final TextCapitalization textCapitalization;
   final String hintText;
+  final TextInputType keyboardType;
 
   SearchWidget({
     @required this.bloc,
@@ -14,10 +15,11 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
     this.color,
     this.textCapitalization,
     this.hintText,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(56.0);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +74,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.only(
-          bottom: 13.0,
+          bottom: 8,
         ),
         child: StreamBuilder<String>(
           stream: bloc.searchQuery,
@@ -87,7 +89,7 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
                 hintText: hintText,
               ),
               textCapitalization: textCapitalization ?? TextCapitalization.none,
-              style: TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 18.0, color: color),
               onChanged: bloc.onSearchQueryChanged,
             );
           },

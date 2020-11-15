@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:search_app_bar/searcher.dart';
 
-import 'filter.dart';
-
 class SearchBloc<T> extends BlocBase {
   final Searcher searcher;
-  Filter<T> filter;
+  //Filter<T> filter;
 
   final _isInSearchMode = BehaviorSubject<bool>();
   final _searchQuery = BehaviorSubject<String>();
@@ -33,27 +31,9 @@ class SearchBloc<T> extends BlocBase {
   ///
   SearchBloc({
     @required this.searcher,
-    this.filter,
   }) {
-    _configureFilter();
-    searchQuery.listen((query) {
-      final List<T> filtered = searcher.data.where((test) => filter(test, query)).toList();
-      searcher.onDataFiltered(filtered);
-    });
+    searchQuery.listen(searcher.onFiltering);
   }
-
-  _configureFilter() {
-    if (filter == null) {
-      if (T == String) {
-        filter = _defaultFilter;
-      } else {
-        throw (Exception(
-            'If data is not a List of Strings, a filter function must be provided for SearchAppBar!'));
-      }
-    }
-  }
-
-  Filter get _defaultFilter => Filters.startsWith;
 
   @override
   void dispose() {
