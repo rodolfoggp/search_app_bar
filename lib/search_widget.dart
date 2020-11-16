@@ -7,14 +7,19 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onCancelSearch;
   final TextCapitalization textCapitalization;
   final String hintText;
+  final TextStyle searchTextStyle;
+  final EdgeInsets searchTextFieldPadding;
+  final bool useCloseButton;
 
-  SearchWidget({
-    @required this.bloc,
-    @required this.onCancelSearch,
-    this.color,
-    this.textCapitalization,
-    this.hintText,
-  });
+  SearchWidget(
+      {@required this.bloc,
+      @required this.onCancelSearch,
+      this.color,
+      this.textCapitalization,
+      this.hintText,
+      this.searchTextStyle,
+      this.searchTextFieldPadding,
+      this.useCloseButton = false});
 
   @override
   Size get preferredSize => Size.fromHeight(56.0);
@@ -31,10 +36,12 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
             children: <Widget>[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  _buildBackButton(),
+                  useCloseButton ? Container() : _buildBackButton(),
                   _buildTextField(),
                   _buildClearButton(),
+                  useCloseButton ? _buildCloseSearchButton() : Container()
                 ],
               ),
             ],
@@ -68,12 +75,24 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  Widget _buildCloseSearchButton() {
+    return StreamBuilder<String>(
+      stream: bloc.searchQuery,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data?.isEmpty != false)
+          return IconButton(
+            icon: Icon(Icons.cancel_outlined, color: color),
+            onPressed: onCancelSearch,
+          );
+        return Container();
+      },
+    );
+  }
+
   Widget _buildTextField() {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.only(
-          bottom: 13.0,
-        ),
+        padding: this.searchTextFieldPadding,
         child: StreamBuilder<String>(
           stream: bloc.searchQuery,
           builder: (context, snapshot) {
@@ -82,12 +101,10 @@ class SearchWidget extends StatelessWidget implements PreferredSizeWidget {
               controller: controller,
               autofocus: true,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 12.0),
                 hintText: hintText,
               ),
               textCapitalization: textCapitalization ?? TextCapitalization.none,
-              style: TextStyle(fontSize: 18.0),
+              style: searchTextStyle,
               onChanged: bloc.onSearchQueryChanged,
             );
           },

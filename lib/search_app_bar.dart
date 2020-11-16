@@ -14,6 +14,7 @@ class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
   final Widget title;
   final bool centerTitle;
   final IconThemeData iconTheme;
+  final double elevation;
   final Color backgroundColor;
   final Color searchBackgroundColor;
   final Color searchElementsColor;
@@ -22,6 +23,9 @@ class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
   final TextCapitalization capitalization;
   final List<Widget> actions;
   final int _searchButtonPosition;
+  final TextStyle searchTextStyle;
+  final EdgeInsets searchTextFieldPadding;
+  final bool useCloseButton;
 
   SearchAppBar({
     @required this.searcher,
@@ -29,10 +33,14 @@ class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
     this.title,
     this.centerTitle = false,
     this.iconTheme,
+    this.elevation = 4.0,
     this.backgroundColor,
     this.searchBackgroundColor,
     this.searchElementsColor,
     this.hintText,
+    this.searchTextStyle = const TextStyle(fontSize: 18.0),
+    this.searchTextFieldPadding = const EdgeInsets.only(bottom: 3.0),
+    this.useCloseButton = false,
     this.flattenOnSearch = false,
     this.capitalization = TextCapitalization.none,
     this.actions = const <Widget>[],
@@ -65,6 +73,7 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
       searcher: widget.searcher,
       filter: widget.filter,
     );
+    _elevation = widget.elevation;
     _controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 150));
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
@@ -87,7 +96,7 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
   void cancelSearch() {
     bloc.setSearchMode(false);
     bloc.onClearSearchQuery();
-    _elevation = 4.0;
+    _elevation = widget.elevation;
     _controller.reverse();
   }
 
@@ -174,6 +183,9 @@ class _SearchAppBarState<T> extends State<SearchAppBar<T>>
             onCancelSearch: cancelSearch,
             textCapitalization: widget.capitalization,
             hintText: widget.hintText,
+            searchTextStyle: widget.searchTextStyle,
+            searchTextFieldPadding: widget.searchTextFieldPadding,
+            useCloseButton: widget.useCloseButton,
           )
         : Container();
   }
