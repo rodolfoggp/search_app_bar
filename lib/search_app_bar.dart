@@ -38,7 +38,7 @@ class SearchAppBar<T> extends StatefulWidget implements PreferredSizeWidget {
     this.searchBackgroundColor,
     this.searchElementsColor,
     this.hintText,
-    this.searchTextStyle,
+    this.searchTextStyle = const TextStyle(fontSize: 18.0),
     this.searchTextFieldPadding = const EdgeInsets.only(bottom: 3.0),
     this.useCloseButton = false,
     this.flattenOnSearch = false,
